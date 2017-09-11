@@ -1,0 +1,25 @@
+{
+  "name": "azure-documentdb-localhost",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dinukadesilva/azure-documentdb-localhost"
+  },
+  "keywords": [
+    "javascript",
+    "azure",
+    "documentdb",
+    "localhost"
+  ],
+  "author": "DInuka De Silva <l.dinukadesilva@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dinukadesilva/azure-documentdb-localhost/issues"
+  },
+  "homepage": "https://github.com/dinukadesilva/azure-documentdb-localhost#readme"
+}
