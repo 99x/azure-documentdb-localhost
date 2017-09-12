@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/dinukadesilva/azure-documentdb-localhost/issues"
   },
-  "homepage": "https://github.com/dinukadesilva/azure-documentdb-localhost#readme"
+  "homepage": "https://github.com/dinukadesilva/azure-documentdb-localhost#readme",
+  "dependencies": {
+    "progress": "^2.0.0"
+  }
 }
