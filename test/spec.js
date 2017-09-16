@@ -36,14 +36,36 @@ describe("azure-documentdb-localhost", function () {
 
           request({
             method: 'GET',
-            url: 'https://localhost:1234/_explorer/index.html'
+            url: 'https://localhost:3001/_explorer/index.html'
           }, function (error, response, body) {
             expect(err).to.be(undefined);
-            expect(body).to.be(undefined);
             done();
           });
-          
-        }, {Port: 3000});
+
+        }, {Port: 3001});
+      });
+    });
+  });
+
+
+  describe("stop", function () {
+    it("should stop azure-cosmosdb-emulator", function (done) {
+      this.timeout(600000);
+      documentdb.install(function (result, err) {
+        documentdb.start(function (result, err) {
+          documentdb.stop(function (result, err) {
+            expect(err).to.be(undefined);
+            
+            request({
+              method: 'GET',
+              url: 'https://localhost:3002/_explorer/index.html'
+            }, function (error, response, body) {
+              expect(error).not.to.be(undefined);
+              done();
+            });
+            
+          });
+        }, {Port: 3002});
       });
     });
   });

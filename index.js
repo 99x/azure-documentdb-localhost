@@ -10,58 +10,13 @@ module.exports = {
   download: downloadDocumentdb,
 
   start: function (callback, options = {}) {
-
-    const validOptions = [
-      "DataPath",
-      "Port",
-      "MongoPort",
-      "DirectPorts",
-      "Key",
-      "EnableRateLimiting",
-      "DisableRateLimiting",
-      "NoUI",
-      "NoExplorer",
-      "PartitionCount",
-      "DefaultPartitionCount",
-      "AllowNetworkAccess",
-      "KeyFile",
-      "NoFirewall",
-      "GenKeyFile",
-      "Consistency"
-    ];
-
-    //TODO
-    const defaultOptions = {};
-
-    var optionsString = "";
-    for (var key in options) {
-      if (validOptions.indexOf(key) >= 0) {
-        optionsString += `/${key}${options[key] ? `=${options[key]}` : ''}`;
-      }
-    }
-
-    var startCommand = `"C:/Program Files/Azure Cosmos DB Emulator/CosmosDB.Emulator.exe" ${optionsString}`;
-    exec(startCommand, function () {
-      const port = options.Port ? options.Port : "8081";
-      const url = `http://localhost:${port}/_explorer/index.html`;
-      const requestOptions = { method: 'GET',
-        url: 'https://localhost:8081/_explorer/index.html'
-      };
-
-      request(requestOptions, function (error, response, body) {
-        if (error) {
-          console.log(`Couldn't start azure-cosmosdb-emulator on port ${port}`);
-          callback(null, new Error(`Couldn't start azure-cosmosdb-emulator on port ${port}`));
-        } else {
-          console.log(`http://localhost:${port}/_explorer/index.html`);
-          callback(`http://localhost:${port}/_explorer/index.html`);
-        }
-      });
-    }).stdout.pipe(process.stdout);
+    options.Shutdown = false;
+    runEmulaterCommand(callback, options);
   },
 
-  stop: function () {
-    //TODO
+  stop: function (callback, options = {}) {
+    options.Shutdown = true;
+    runEmulaterCommand(callback, options);
   }
 };
 
@@ -89,6 +44,48 @@ function installDocumentdb(callback) {
 
     }
   });
+}
+
+function runEmulaterCommand(callback, options = {}) {
+  const validOptions = [
+    "Shutdown",
+    "DataPath",
+    "Port",
+    "MongoPort",
+    "DirectPorts",
+    "Key",
+    "EnableRateLimiting",
+    "DisableRateLimiting",
+    "NoUI",
+    "NoExplorer",
+    "PartitionCount",
+    "DefaultPartitionCount",
+    "AllowNetworkAccess",
+    "KeyFile",
+    "NoFirewall",
+    "GenKeyFile",
+    "Consistency"
+  ];
+
+  //TODO
+  const defaultOptions = {};
+
+  var optionsString = "";
+  for (var key in options) {
+    if (validOptions.indexOf(key) >= 0) {
+      var value = options[key];
+      if (value === true) {
+        optionsString += `/${key}`;
+      } else if (value) {
+        optionsString += `/${key}=${value}`;
+      }
+    }
+  }
+
+  var startCommand = `"C:/Program Files/Azure Cosmos DB Emulator/CosmosDB.Emulator.exe" ${optionsString}`;
+  exec(startCommand, function () {
+    callback({});
+  }).stdout.pipe(process.stdout);
 }
 
 //TODO let the method to specify the destination
