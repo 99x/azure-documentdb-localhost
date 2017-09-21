@@ -16,3 +16,6 @@ coverage
 
 # Webstorm
 .idea
+
+# downloads and logs
+.bin

@@ -10,7 +10,7 @@ describe("azure-documentdb-localhost", function () {
       this.timeout(600000);
       documentdb.download(function (result, err) {
         expect(err).to.be(undefined);
-        expect(fs.existsSync("./azure-cosmosdb-emulator.msi")).to.be(true);
+        expect(fs.existsSync("./.bin/azure-cosmosdb-emulator.msi")).to.be(true);
         done();
       });
     });
