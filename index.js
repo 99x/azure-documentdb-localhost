@@ -27,8 +27,9 @@ function installDocumentdb(callback) {
     } else {
 
       console.log("Installing downloading azure-cosmosdb-emulator. Process may take few minutes.");
-
-      exec('start /wait msiexec /i azure-cosmosdb-emulator.msi /qn /log "installtion.log"', function () {
+      var command = 'start /wait msiexec /i azure-cosmosdb-emulator.msi /qn /log "installtion.log"';
+      console.log(` > ${command}`);
+      exec(command, function () {
 
         //TODO check errors
 
@@ -66,26 +67,31 @@ function runEmulaterCommand(callback, options = {}) {
     "GenKeyFile",
     "Consistency"
   ];
-
+  
   //TODO
-  const defaultOptions = {};
+  const defaultOptions = {
+    "AllowNetworkAccess": true,
+    "Key": "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="
+  };
 
   var optionsString = "";
+  options = Object.assign({}, defaultOptions, options);
   for (var key in options) {
     if (validOptions.indexOf(key) >= 0) {
       var value = options[key];
       if (value === true) {
-        optionsString += `/${key}`;
+        optionsString += ` /${key}`;
       } else if (value) {
-        optionsString += `/${key}=${value}`;
+        optionsString += ` /${key}=${value}`;
       }
     }
   }
 
   var startCommand = `"C:/Program Files/Azure Cosmos DB Emulator/CosmosDB.Emulator.exe" ${optionsString}`;
+  console.log(` > ${startCommand}`);
   exec(startCommand, function () {
     callback({});
-  }).stdout.pipe(process.stdout);
+  });
 }
 
 //TODO let the method to specify the destination
