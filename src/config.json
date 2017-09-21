@@ -1,0 +1,5 @@
+{
+  "downloadUrl": "http://documentdbportalstorage.blob.core.windows.net/emulator/2017.08.30/Azure%20Cosmos%20DB.Emulator.msi",
+  "downloadPath": "./azure-cosmosdb-emulator.msi",
+  "exePath": "C:/Program Files/Azure Cosmos DB Emulator/CosmosDB.Emulator.exe"
+}
