@@ -1,3 +1,5 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # Azure Documentdb Localhost
 
 `zure-documentdb-localhost` is an npm module which provides the utility of downloading azure documentdb emulator and seting up the local enronment. 
