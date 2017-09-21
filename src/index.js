@@ -7,6 +7,7 @@ var config = require("./config.json");
 
 var AzureDocumentdbLocalhost = {
   install: function (callback) {
+    validateBin();
     if (hasEmulatorInstalled()) {
       callback();
     } else {
@@ -21,6 +22,7 @@ var AzureDocumentdbLocalhost = {
   },
 
   download: function (callback) {
+    validateBin();
     if (hasEmulatorDownloaded()) {
       callback();
     } else {
@@ -29,11 +31,13 @@ var AzureDocumentdbLocalhost = {
   },
 
   start: function (callback, options = {}) {
+    validateBin();
     options.Shutdown = false;
     runEmulaterCommand(callback, options);
   },
 
   stop: function (callback, options = {}) {
+    validateBin();
     options.Shutdown = true;
     runEmulaterCommand(callback, options);
   }
@@ -41,8 +45,14 @@ var AzureDocumentdbLocalhost = {
 
 module.exports = AzureDocumentdbLocalhost;
 
+function validateBin() {
+  if (!fs.existsSync(config.bin)){
+    fs.mkdirSync(config.bin);
+  }
+}
+
 function hasEmulatorDownloaded() {
-  return fs.existsSync(config.downloadPath);
+  return fs.existsSync(`${config.bin}/${config.downloadPath}`);
 }
 
 function hasEmulatorInstalled() {
@@ -51,7 +61,7 @@ function hasEmulatorInstalled() {
 
 function installDocumentdb(callback) {
   console.log("Installing downloading azure-cosmosdb-emulator. Process may take few minutes.");
-  var command = 'start /wait msiexec /i azure-cosmosdb-emulator.msi /qn /log "installtion.log"';
+  var command = `start /wait msiexec /i azure-cosmosdb-emulator.msi /qn /log "${config.bin}/${config.installationLogPath}"`;
   console.log(` > ${command}`);
   exec(command, function () {
 
@@ -119,7 +129,7 @@ function runEmulaterCommand(callback, options = {}) {
 function downloadDocumentdb(callback) {
   console.log("Started downloading azure-cosmosdb-emulator. Process may take few minutes.");
 
-  var file = fs.createWriteStream(config.downloadPath);
+  var file = fs.createWriteStream(`${config.bin}/${config.downloadPath}`);
 
   http.get(config.downloadUrl, function (response) {
     var len = parseInt(response.headers['content-length'], 10);
