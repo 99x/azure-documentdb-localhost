@@ -16,7 +16,7 @@
 var documentdbEmulator = require('zure-documentdb-localhost');
 
 //Download and install the documentdb emulator
-documentdbEmulator.start();
+documentdbEmulator.install();
 
 //Starts the local server
 documentdbEmulator.start();
