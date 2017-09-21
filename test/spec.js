@@ -1,4 +1,4 @@
-var documentdb = require("../index.js");
+var documentdb = require("../src/index.js");
 var expect = require("expect.js");
 var fs = require("fs");
 var request = require("request");

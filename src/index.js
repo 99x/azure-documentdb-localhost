@@ -3,6 +3,7 @@ var request = require("request");
 var ProgressBar = require('progress');
 var fs = require("fs");
 var exec = require('child_process').exec;
+var config = require("./config.json");
 
 var AzureDocumentdbLocalhost = {
   install: function (callback) {
@@ -41,11 +42,11 @@ var AzureDocumentdbLocalhost = {
 module.exports = AzureDocumentdbLocalhost;
 
 function hasEmulatorDownloaded() {
-  return fs.existsSync("./azure-cosmosdb-emulator.msi");
+  return fs.existsSync(config.downloadPath);
 }
 
 function hasEmulatorInstalled() {
-  return fs.existsSync("C:/Program Files/Azure Cosmos DB Emulator/CosmosDB.Emulator.exe");
+  return fs.existsSync(config.exePath);
 }
 
 function installDocumentdb(callback) {
@@ -107,7 +108,7 @@ function runEmulaterCommand(callback, options = {}) {
     }
   }
 
-  var startCommand = `"C:/Program Files/Azure Cosmos DB Emulator/CosmosDB.Emulator.exe" ${optionsString}`;
+  var startCommand = `"${config.exePath}" ${optionsString}`;
   console.log(` > ${startCommand}`);
   exec(startCommand, function () {
     callback({});
@@ -116,14 +117,11 @@ function runEmulaterCommand(callback, options = {}) {
 
 //TODO let the method to specify the destination
 function downloadDocumentdb(callback) {
-
   console.log("Started downloading azure-cosmosdb-emulator. Process may take few minutes.");
 
-  //TODO avoid downloading when the file has been downloaded already
-  var file = fs.createWriteStream("./azure-cosmosdb-emulator.msi");
+  var file = fs.createWriteStream(config.downloadPath);
 
-  //TODO add the url to a config
-  http.get("http://documentdbportalstorage.blob.core.windows.net/emulator/2017.08.30/Azure%20Cosmos%20DB.Emulator.msi", function (response) {
+  http.get(config.downloadUrl, function (response) {
     var len = parseInt(response.headers['content-length'], 10);
     var bar = new ProgressBar('Downloading azure-cosmosdb-emulator [:bar] :percent :etas', {
       complete: '=',
