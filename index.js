@@ -4,10 +4,28 @@ var ProgressBar = require('progress');
 var fs = require("fs");
 var exec = require('child_process').exec;
 
-module.exports = {
-  install: installDocumentdb,
+var AzureDocumentdbLocalhost = {
+  install: function (callback) {
+    if (hasEmulatorInstalled()) {
+      callback();
+    } else {
+      AzureDocumentdbLocalhost.download(function (data, err) {
+        if (err) {
+          callback(null, err);
+        } else {
+          installDocumentdb(callback);
+        }
+      });
+    }
+  },
 
-  download: downloadDocumentdb,
+  download: function (callback) {
+    if (hasEmulatorDownloaded()) {
+      callback();
+    } else {
+      downloadDocumentdb(callback);
+    }
+  },
 
   start: function (callback, options = {}) {
     options.Shutdown = false;
@@ -20,30 +38,32 @@ module.exports = {
   }
 };
 
+module.exports = AzureDocumentdbLocalhost;
+
+function hasEmulatorDownloaded() {
+  return fs.existsSync("./azure-cosmosdb-emulator.msi");
+}
+
+function hasEmulatorInstalled() {
+  return fs.existsSync("C:/Program Files/Azure Cosmos DB Emulator/CosmosDB.Emulator.exe");
+}
+
 function installDocumentdb(callback) {
-  downloadDocumentdb(function (result, err) {
-    if (err) {
-      callback(result, err);
+  console.log("Installing downloading azure-cosmosdb-emulator. Process may take few minutes.");
+  var command = 'start /wait msiexec /i azure-cosmosdb-emulator.msi /qn /log "installtion.log"';
+  console.log(` > ${command}`);
+  exec(command, function () {
+
+    //TODO check errors
+
+    if (hasEmulatorInstalled()) {
+      console.log("azure-cosmosdb-emulator Installation Complete!");
+      callback("azure-cosmosdb-emulator Installation Complete!");
     } else {
-
-      console.log("Installing downloading azure-cosmosdb-emulator. Process may take few minutes.");
-      var command = 'start /wait msiexec /i azure-cosmosdb-emulator.msi /qn /log "installtion.log"';
-      console.log(` > ${command}`);
-      exec(command, function () {
-
-        //TODO check errors
-
-        if (fs.existsSync("C:/Program Files/Azure Cosmos DB Emulator/CosmosDB.Emulator.exe")) {
-          console.log("azure-cosmosdb-emulator Installation Complete!");
-          callback("azure-cosmosdb-emulator Installation Complete!");
-        } else {
-          console.log("azure-cosmosdb-emulator Installation Failed!");
-          callback(null, new Error("azure-cosmosdb-emulator Installation Failed!"));
-        }
-
-      });
-
+      console.log("azure-cosmosdb-emulator Installation Failed!");
+      callback(null, new Error("azure-cosmosdb-emulator Installation Failed!"));
     }
+
   });
 }
 
@@ -67,7 +87,7 @@ function runEmulaterCommand(callback, options = {}) {
     "GenKeyFile",
     "Consistency"
   ];
-  
+
   //TODO
   const defaultOptions = {
     "AllowNetworkAccess": true,
