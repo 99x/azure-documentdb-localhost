@@ -17,5 +17,5 @@ coverage
 # Webstorm
 .idea
 
-# downloads and logs
-.bin
+# downloads
+azure-cosmosdb-emulator.msi
