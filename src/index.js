@@ -2,12 +2,11 @@ var http = require('http');
 var request = require("request");
 var ProgressBar = require('progress');
 var fs = require("fs");
-var exec = require('child_process').exec;
+var exec = require('child_process').execSync;
 var config = require("./config.json");
 
 var AzureDocumentdbLocalhost = {
   install: function (callback) {
-    validateBin();
     if (hasEmulatorInstalled()) {
       callback();
     } else {
@@ -22,7 +21,6 @@ var AzureDocumentdbLocalhost = {
   },
 
   download: function (callback) {
-    validateBin();
     if (hasEmulatorDownloaded()) {
       callback();
     } else {
@@ -31,13 +29,11 @@ var AzureDocumentdbLocalhost = {
   },
 
   start: function (callback, options = {}) {
-    validateBin();
     options.Shutdown = false;
     runEmulaterCommand(callback, options);
   },
 
   stop: function (callback, options = {}) {
-    validateBin();
     options.Shutdown = true;
     runEmulaterCommand(callback, options);
   }
@@ -45,14 +41,8 @@ var AzureDocumentdbLocalhost = {
 
 module.exports = AzureDocumentdbLocalhost;
 
-function validateBin() {
-  if (!fs.existsSync(config.bin)){
-    fs.mkdirSync(config.bin);
-  }
-}
-
 function hasEmulatorDownloaded() {
-  return fs.existsSync(`${config.bin}/${config.downloadPath}`);
+  return fs.existsSync(config.downloadPath);
 }
 
 function hasEmulatorInstalled() {
@@ -61,7 +51,7 @@ function hasEmulatorInstalled() {
 
 function installDocumentdb(callback) {
   console.log("Installing downloading azure-cosmosdb-emulator. Process may take few minutes.");
-  var command = `start /wait msiexec /i azure-cosmosdb-emulator.msi /qn /log "${config.bin}/${config.installationLogPath}"`;
+  var command = `start /wait msiexec /i azure-cosmosdb-emulator.msi /qn /log "${config.installationLogPath}"`;
   console.log(` > ${command}`);
   exec(command, function () {
 
@@ -101,7 +91,9 @@ function runEmulaterCommand(callback, options = {}) {
 
   //TODO
   const defaultOptions = {
+    "NoFirewall": true,
     "AllowNetworkAccess": true,
+    "NoUI": true,
     "Key": "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="
   };
 
@@ -120,16 +112,24 @@ function runEmulaterCommand(callback, options = {}) {
 
   var startCommand = `"${config.exePath}" ${optionsString}`;
   console.log(` > ${startCommand}`);
-  exec(startCommand, function () {
-    callback({});
-  });
+
+  /*
+  TODO remove the try catch and handle the command execution
+  This try catch was added since some times the exec module does not finishes the execution and being stuck
+   */
+  try {
+    //TODO handle command ececution errors
+    exec(startCommand, {timeout: 50000});
+  } catch (err) {
+  }
+  callback && callback({});
 }
 
 //TODO let the method to specify the destination
 function downloadDocumentdb(callback) {
   console.log("Started downloading azure-cosmosdb-emulator. Process may take few minutes.");
 
-  var file = fs.createWriteStream(`${config.bin}/${config.downloadPath}`);
+  var file = fs.createWriteStream(config.downloadPath);
 
   http.get(config.downloadUrl, function (response) {
     var len = parseInt(response.headers['content-length'], 10);
