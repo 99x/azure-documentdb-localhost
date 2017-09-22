@@ -33,6 +33,8 @@ documentdbEmulator.stop();
 3. `npm install` Install all the dependencies  
 4. `npm run test` Executes all the unit test cases
 
+![image](https://user-images.githubusercontent.com/10680296/30747624-72226160-9fcb-11e7-9a4c-b948a3759b36.png)
+
 # Acknowledgement 
 
 This project was initiated through **Hacktitude**, An opensource competition organized by [@99XT](https://github.com/99XT) for undergraduates. As a part of the second round of the competition for the top ten contributors in the first round, ten new opensource projects were introduced and this project is one of them. I would like to thank [@99XT](https://github.com/99XT) for organizing this such of events for us which helps us to get more exposure. And my mentors [@AshanFernando](https://github.com/AshanFernando) [@rehrumesh](https://github.com/rehrumesh) who were guiding me during the two weeks of the journey to get this project a success, Thanks for everything.
