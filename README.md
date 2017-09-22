@@ -16,7 +16,7 @@
 var documentdbEmulator = require('zure-documentdb-localhost');
 
 //Download and install the documentdb emulator
-documentdbEmulator.start();
+documentdbEmulator.install();
 
 //Starts the local server
 documentdbEmulator.start();
@@ -35,7 +35,7 @@ documentdbEmulator.stop();
 
 # Acknowledgement 
 
-This project was initiated through **Hacktitude**, An opensource competition organized by @99XT for undergraduates. As a part of the second round of the competition for the top ten contributors in the first round, ten new opensource projects were introduced and this project is one of them. I would like to thank @99XT for organizing this such of events for us which helps us to get more exposure. And my mentors @AshanFernando @rehrumesh who were guiding me during the two weeks of the journey to get this project a success, Thanks for everything.
+This project was initiated through **Hacktitude**, An opensource competition organized by [@99XT](https://github.com/99XT) for undergraduates. As a part of the second round of the competition for the top ten contributors in the first round, ten new opensource projects were introduced and this project is one of them. I would like to thank [@99XT](https://github.com/99XT) for organizing this such of events for us which helps us to get more exposure. And my mentors [@AshanFernando](https://github.com/AshanFernando) [@rehrumesh](https://github.com/rehrumesh) who were guiding me during the two weeks of the journey to get this project a success, Thanks for everything.
 
 # Contribute
 
