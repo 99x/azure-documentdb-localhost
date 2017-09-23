@@ -2,7 +2,8 @@ var http = require('http');
 var request = require("request");
 var ProgressBar = require('progress');
 var fs = require("fs");
-var exec = require('child_process').execSync;
+var exec = require('child_process').exec;
+var execSync = require('child_process').execSync;
 var config = require("./config.json");
 
 var AzureDocumentdbLocalhost = {
@@ -119,7 +120,7 @@ function runEmulaterCommand(callback, options = {}) {
    */
   try {
     //TODO handle command ececution errors
-    exec(startCommand, {timeout: 50000});
+    execSync(startCommand, {timeout: 50000});
   } catch (err) {
   }
   callback && callback({});
