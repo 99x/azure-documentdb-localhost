@@ -33,7 +33,7 @@ documentdbEmulator.stop();
 3. `npm install` Install all the dependencies  
 4. `npm run test` Executes all the unit test cases
 
-![image](https://user-images.githubusercontent.com/10680296/30747624-72226160-9fcb-11e7-9a4c-b948a3759b36.png)
+![npm_run_test](https://user-images.githubusercontent.com/8043309/31282955-195097fc-aa82-11e7-9784-79699f984b4f.gif)
 
 # Acknowledgement 
 
